@@ -1,11 +1,82 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import HeaderStart from "./HeaderStart";
+import { validateFormData } from "../utils/validateFormData";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const confirmRef = useRef(null);
+  const nameRef = useRef(null);
+
+  const handleClick = () => {
+    let response;
+    if (isSignUp) {
+      response = validateFormData(
+        emailRef.current.value,
+        passwordRef.current.value,
+        confirmRef.current.value,
+        nameRef.current.value,
+        true
+      );
+    } else {
+      response = validateFormData(
+        emailRef.current.value,
+        passwordRef.current.value
+      );
+    }
+    setErrorMessage(response);
+
+    if (response !== null) return;
+
+    // sign up / sign in authentication
+
+    if (isSignUp) {
+      // sign up
+      createUserWithEmailAndPassword(
+        auth,
+        emailRef.current.value,
+        passwordRef.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage("email already exists");
+        });
+    } else {
+      // sign in
+      signInWithEmailAndPassword(
+        auth,
+        emailRef.current.value,
+        passwordRef.current.value
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage("invalid user credentials");
+        });
+    }
+  };
 
   const handleSignUp = () => {
     setIsSignUp(!isSignUp);
+    emailRef.current.value = "";
+    passwordRef.current.value = "";
   };
 
   return (
@@ -25,29 +96,37 @@ const Login = () => {
         </div>
         {isSignUp && (
           <input
+            ref={nameRef}
             className="w-full my-2 py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
             type="text"
-            placeholder="Full name"
+            placeholder="Name"
           />
         )}
         <input
+          ref={emailRef}
           className="w-full my-2 py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
           type="email"
           placeholder="Email or mobile number"
         />
         <input
+          ref={passwordRef}
           className="w-full my-2 py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
           type="password"
           placeholder="Password"
         />
         {isSignUp && (
           <input
+            ref={confirmRef}
             className="w-full my-2 py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
             type="password"
             placeholder="Confirm password"
           />
         )}
-        <div className="bg-red-600 text-base text-center font-semibold py-2 px-4 m-auto cursor-pointer mt-4 rounded-md hover:bg-red-700 transition ease-in-out delay-75">
+        <div className="text-red-700 text-sm">{errorMessage}</div>
+        <div
+          onClick={handleClick}
+          className="bg-red-600 text-base text-center font-semibold py-2 px-4 m-auto cursor-pointer mt-4 rounded-md hover:bg-red-700 transition ease-in-out delay-75"
+        >
           {isSignUp ? "Sign Up" : "Sign In"}
         </div>
         <div className="mt-6">
