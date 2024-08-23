@@ -1,76 +1,24 @@
 import { useRef, useState } from "react";
 import HeaderStart from "./HeaderStart";
-import { validateFormData } from "../utils/validateFormData";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { auth } from "../utils/firebase";
+import useAuth from "../utils/useAuth";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const confirmRef = useRef(null);
   const nameRef = useRef(null);
 
+  const { errorMessage, authenticate } = useAuth();
+
   const handleClick = () => {
-    let response;
-    if (isSignUp) {
-      response = validateFormData(
-        emailRef.current.value,
-        passwordRef.current.value,
-        confirmRef.current.value,
-        nameRef.current.value,
-        true
-      );
-    } else {
-      response = validateFormData(
-        emailRef.current.value,
-        passwordRef.current.value
-      );
-    }
-    setErrorMessage(response);
-
-    if (response !== null) return;
-
-    // sign up / sign in authentication
-
-    if (isSignUp) {
-      // sign up
-      createUserWithEmailAndPassword(
-        auth,
-        emailRef.current.value,
-        passwordRef.current.value
-      )
-        .then((userCredential) => {
-          // Signed up
-          const user = userCredential.user;
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          setErrorMessage("email already exists");
-        });
-    } else {
-      // sign in
-      signInWithEmailAndPassword(
-        auth,
-        emailRef.current.value,
-        passwordRef.current.value
-      )
-        .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          setErrorMessage("invalid user credentials");
-        });
-    }
+    authenticate(
+      isSignUp,
+      emailRef?.current?.value,
+      passwordRef?.current?.value,
+      confirmRef?.current?.value,
+      nameRef?.current?.value
+    );
   };
 
   const handleSignUp = () => {
