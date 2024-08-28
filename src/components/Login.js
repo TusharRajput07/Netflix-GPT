@@ -37,7 +37,7 @@ const Login = () => {
         />
         {/* <div className="bg-slate-500 text-4xl absolute z-10">jdbfjsd</div> */}
       </div>
-
+      <div className="absolute bg-gradient-to-t from-black h-96 w-screen -bottom-36"></div>
       <form className="absolute mt-28 top-0 left-1/2 -translate-x-1/2 text-white w-[450px] px-16 py-12 box-border bg-black bg-opacity-70 p-4">
         <div className="font-bold mb-7 text-3xl">
           {isSignUp ? "Sign Up" : "Sign In"}
@@ -54,7 +54,7 @@ const Login = () => {
           ref={emailRef}
           className="w-full my-2 py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
           type="email"
-          placeholder="Email or mobile number"
+          placeholder="Email"
         />
         <input
           ref={passwordRef}

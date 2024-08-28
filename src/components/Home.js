@@ -10,8 +10,8 @@ const Home = () => {
           className="brightness-50 scale-125 translate-y-[-10%] w-full h-full"
           src="https://assets.nflxext.com/ffe/siteui/vlv3/20bf1f4d-1c73-48fd-8689-310d6dd80efc/81bdc063-cb8f-4afe-8a02-a3131ca4ef5e/IN-en-20240812-POP_SIGNUP_TWO_WEEKS-perspective_WEB_7998f3b6-63e3-424a-8328-550cf777ddce_small.jpg"
         />
-        {/* <div className="bg-slate-500 text-4xl absolute z-10">jdbfjsd</div> */}
       </div>
+      <div className="absolute bg-gradient-to-t from-black h-96 w-screen -bottom-36"></div>
       <div className="absolute text-white top-0 my-72 w-full text-center">
         <div className="font-extrabold text-5xl">
           Unlimited movies, TV shows and more
@@ -20,7 +20,7 @@ const Home = () => {
           Watch anywhere. Cancel anytime.
         </div>
         <div className="text-xl my-2">
-          Ready to watch? Enter your email to create or restart your membership.
+          Ready to watch? Click on the button below for Authentication.
         </div>
         <Link to="/login">
           <div className="bg-red-600 p-4 text-2xl font-semibold w-48 m-auto cursor-pointer mt-4 rounded-md hover:bg-red-700 transition ease-in-out delay-75">
