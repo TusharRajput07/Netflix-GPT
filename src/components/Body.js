@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
+import Search from "./Search";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,10 @@ const Body = () => {
     {
       path: "/browse",
       element: <Browse />,
+    },
+    {
+      path: "/search",
+      element: <Search />,
     },
   ]);
 

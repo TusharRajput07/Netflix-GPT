@@ -23,9 +23,9 @@ const VideoBackground = ({ id }) => {
   }, []);
 
   return (
-    <div className="max-w-screen h-[85vh] overflow-hidden pointer-events-none">
+    <div className="relative h-[95vh] overflow-hidden">
       <iframe
-        className="w-screen aspect-video -mt-[104px]"
+        className="w-full h-full scale-[1.4] "
         src={
           "https://www.youtube.com/embed/" +
           Trailer +
@@ -36,7 +36,9 @@ const VideoBackground = ({ id }) => {
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerPolicy="strict-origin-when-cross-origin"
         allowFullScreen
+        style={{ pointerEvents: "none" }} // initial style
       ></iframe>
+      <div className="absolute top-0 w-full h-full bg-gradient-to-t from-[#141414]"></div>
     </div>
   );
 };

@@ -1,85 +1,142 @@
 import { useState } from "react";
 import { CARD_IMG_URL, OPTIONS } from "../utils/constants";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
-import AddIcon from "@mui/icons-material/Add";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import { Popover } from "@mui/material";
+import DialogMedia from "./DialogMedia";
+import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 
 const Card = ({ media, isMovie }) => {
-  // console.log(media);
-
   const { poster_path, original_title, overview, original_name, id } = media;
-  const [isHovered, setIsHovered] = useState(false);
   const [trailer, setTrailer] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const fetchTrailer = async (isMovie, id) => {
-    if (isMovie) {
-      const data = await fetch(
-        "https://api.themoviedb.org/3/movie/" + id + "/videos?language=en-US",
-        OPTIONS
-      );
-      const json = await data.json();
-      // console.log(json);
-      const filteredData = json?.results?.find(
-        (video) => video.type === "Trailer"
-      );
-      setTrailer(filteredData?.key);
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+    handlePopoverClose();
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+    if (!trailer) {
+      fetchTrailer(isMovie, id);
     }
   };
 
-  const handleMouseEnter = (isMovie) => {
-    setIsHovered(true);
-    fetchTrailer(isMovie, id);
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
+  const fetchTrailer = async (isMovie, id) => {
+    if (!trailer) {
+      if (isMovie) {
+        const data = await fetch(
+          "https://api.themoviedb.org/3/movie/" + id + "/videos?language=en-US",
+          OPTIONS
+        );
+        const json = await data.json();
+        const filteredData = json?.results?.find(
+          (video) => video.type === "Trailer"
+        );
+        setTrailer(filteredData?.key);
+      } else {
+        const data = await fetch(
+          "https://api.themoviedb.org/3/tv/" + id + "/videos?language=en-US",
+          OPTIONS
+        );
+        const json = await data.json();
+        const filteredData = json?.results?.find(
+          (video) => video.type === "Trailer"
+        );
+        setTrailer(filteredData?.key);
+      }
+    }
   };
 
   return (
     <div
       className="mr-4 cursor-pointer"
-      onMouseEnter={() => handleMouseEnter(isMovie, id)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handlePopoverOpen}
+      onMouseLeave={handlePopoverClose}
     >
       <img
         className="min-w-32 w-32 rounded-sm"
         src={CARD_IMG_URL + poster_path}
         alt="Media"
       />
-      {isHovered && (
-        <div className="text-white border border-white absolute -top-10 float-left z-50">
-          <div className="cursor-default pointer-events-none overflow-hidden bg-black">
+      <Popover
+        id="mouse-over-popover"
+        className="pointer-events-none"
+        classes={{
+          paper: "pointer-events-auto",
+        }}
+        open={open}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "center",
+        }}
+        onClose={handlePopoverClose}
+        disableScrollLock
+      >
+        <div className="text-white w-[25vw] relative">
+          <div className="cursor-default pointer-events-none bg-black overflow-hidden h-48">
             <iframe
-              className="pointer-events-none scale-[2.2] -translate-y-2"
-              // width="full"
-              // height="full"
+              className="pointer-events-none w-full h-full scale-[1.9]"
               src={
                 "https://www.youtube.com/embed/" +
                 trailer +
                 "?si=G6VpOb_C_MfSZlHh&autoplay=1&mute=1&rel=0&loop=1&showinfo=0&controls=0"
               }
               title="YouTube video player"
-              frameborder="0"
+              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
             ></iframe>
           </div>
-          <div className="h-fit bg-[#141414] w-[20rem] text-wrap box-border p-2">
+          {/* <div className="h-48 w-full absolute top-0 bg-gradient-to-t from-[#141414]"></div> */}
+          <div
+            onClick={handleOpenDialog}
+            className="h-fit cursor-pointer bg-[#141414] text-wrap box-border p-2"
+          >
             <div className="text-lg font-bold mb-2">
               {original_title ? original_title : original_name}
-            </div>
-            <div className="text-xs font-extralight line-clamp-3">
-              {overview}
             </div>
             <div className="flex my-2">
               <PlayCircleIcon className="mr-2" fontSize="large" />
               <AddCircleOutlineOutlinedIcon className="mr-2" fontSize="large" />
               <ThumbUpOffAltIcon fontSize="large" />
             </div>
-            <div>{id}</div>
-            <div>{isMovie?.toString()}</div>
+            {/* <div>{id}</div> */}
+            <div className="flex justify-end items-center">
+              Show More
+              <ExpandCircleDownOutlinedIcon className="ml-1" fontSize="large" />
+            </div>
           </div>
         </div>
-      )}
+      </Popover>
+
+      <DialogMedia
+        open={openDialog}
+        handleClose={handleCloseDialog}
+        media={media}
+        isMovie={isMovie}
+        trailer={trailer}
+      />
     </div>
   );
 };

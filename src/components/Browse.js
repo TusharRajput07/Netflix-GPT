@@ -7,6 +7,7 @@ import usePopularMovies from "../hooks/usePopularMovies";
 import useOnTheAirTV from "../hooks/useOnTheAirTV";
 import useTopRatedTV from "../hooks/useTopRatedTV";
 import useTopRatedMovies from "../hooks/useTopRatedMovies";
+import Footer from "./Footer";
 
 const Browse = () => {
   const getNowPlayingMovies = useNowPlayingMovies();
@@ -26,11 +27,14 @@ const Browse = () => {
   return (
     <div>
       <Header />
-      <VideoContainer />
-      <div className="absolute bottom-16 h-80 z-10 bg-gradient-to-t from-black w-full"></div>
+      <div className="bg-black h-[95vh]">
+        <VideoContainer />
+      </div>
+      {/* <div className="absolute bottom-16 h-80 z-10 bg-gradient-to-t from-black w-full"></div> */}
       <div className="absolute z-20 bg-[#141414] pl-16 w-full">
         <CardsContainer />
       </div>
+      <Footer />
     </div>
   );
 };
