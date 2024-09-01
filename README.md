@@ -1,70 +1,37 @@
-# Getting Started with Create React App
+### Project Details So Far ###
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Used Create React App to kick start the project.
 
-## Available Scripts
+# Integrated Tailwind CSS into the project.
 
-In the project directory, you can run:
+# Created the Home page using Netflix original Background.
 
-### `npm start`
+# Ureated Login Form for sign in/ sign up.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Used useRef hook for extracting form input.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Used Regex for validating form input.
 
-### `npm test`
+# Integrated Google firebase onto the project.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Created a new project on firebase. and used their APIs for sign in/ sign up.
 
-### `npm run build`
+# Created Redux store for storing user information in User Slice.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Used useNavigate hook to navigate to Browse Page.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Created Header for Browse Page.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Used firebase Api for signing out from the app.
 
-### `npm run eject`
+# Used TMDB APIs to fetch the media data to show on browse page.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Added backGround video component using youtube iframe.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Created card, cardList components for showing media cards on the browse page.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Used TMDB to fill out cardList with different Movies and TV shows.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Created hover feature to show additional component with running video over the movie card image.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Used Material UI Dialog to show Slider Dialog to show Full Screen Movie Information.
