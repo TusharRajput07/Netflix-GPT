@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useSelector } from "react-redux";
@@ -49,15 +49,26 @@ const Header = () => {
       }`}
     >
       <div className="flex items-center">
-        <img
-          className="w-28 mr-3  cursor-pointer"
-          src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-          alt="logo"
-        ></img>
-        <div className="mx-3 cursor-pointer">Home</div>
+        <Link to="/browse">
+          <img
+            className="w-28 mr-3  cursor-pointer"
+            src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
+            alt="logo"
+          ></img>
+        </Link>
+        <Link to="/browse">
+          <div className="mx-3 cursor-pointer">Home</div>
+        </Link>
         <div className="mx-3 cursor-pointer">TV Shows</div>
         <div className="mx-3 cursor-pointer">Movies</div>
-        <div className="mx-3 cursor-pointer">My List</div>
+        <div
+          onClick={() => {
+            navigate("/mylist");
+          }}
+          className="mx-3 cursor-pointer"
+        >
+          My List
+        </div>
       </div>
 
       <div className="flex items-center">

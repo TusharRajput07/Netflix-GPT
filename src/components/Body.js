@@ -8,6 +8,7 @@ import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import Search from "./Search";
+import MyList from "./MyList";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,10 @@ const Body = () => {
     {
       path: "/search",
       element: <Search />,
+    },
+    {
+      path: "/mylist",
+      element: <MyList />,
     },
   ]);
 

@@ -8,6 +8,8 @@ import DialogMedia from "./DialogMedia";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 
 const Card = ({ media, isMovie }) => {
+  console.log(media);
+
   const { poster_path, original_title, overview, original_name, id } = media;
   const [trailer, setTrailer] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -62,10 +64,14 @@ const Card = ({ media, isMovie }) => {
     }
   };
 
+  if (!poster_path) {
+    return <></>;
+  }
+
   return (
     <div
       className="mr-4 cursor-pointer"
-      onMouseEnter={handlePopoverOpen}
+      onClick={handlePopoverOpen}
       onMouseLeave={handlePopoverClose}
     >
       <img
