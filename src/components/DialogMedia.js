@@ -1,34 +1,38 @@
 import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
-import * as React from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { OPTIONS } from "../utils/constants";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { useSelector } from "react-redux";
+import { forwardRef, useEffect, useRef, useState } from "react";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import useGetWatchlist from "../hooks/useWatchlist";
+import Tooltip from "@mui/material/Tooltip";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
-  const [details, setDetails] = React.useState(null);
-  const { original_title, title, id, overview } = media;
+  const { handleAddToList, handleRemoveFromList } = useGetWatchlist();
 
-  const [isLiked, setIsLiked] = React.useState(false);
-  const [inList, setInList] = React.useState(false);
+  const [details, setDetails] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
+
+  const { original_title, original_name, title, id, overview, poster_path } =
+    media;
+
+  const watchList = useSelector((store) => store?.watchlist);
+  const watchListDoc = watchList?.find((data) => data?.id == id);
+
+  const iframeRef = useRef(null);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
   };
-
-  const handleAddToList = () => {
-    setInList(!inList);
-  };
-
-  const iframeRef = React.useRef(null);
 
   const handleFullScreen = () => {
     const iframe = iframeRef.current;
@@ -58,11 +62,10 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
           OPTIONS
         );
     const json = await data.json();
-    console.log(json);
     setDetails(json);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     open && fetchDetails();
   }, [open]);
 
@@ -99,7 +102,7 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
 
         <div className="absolute  top-[55vh] z-20 left-14">
           <div className="text-3xl mb-4 font-bold text-white">
-            {original_title ? original_title : title}
+            {original_title ? original_title : original_name}
           </div>
           <div className="flex items-center">
             <div
@@ -109,18 +112,63 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
               <PlayArrowIcon fontSize="medium" />
               Play
             </div>
-            {inList ? (
-              <CheckCircleOutlineIcon
-                onClick={handleAddToList}
-                fontSize="large"
-                className="text-white cursor-pointer hover:text-[#b3b3b3]"
-              />
+            {watchListDoc ? (
+              <Tooltip
+                title="Remove from my list"
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      backgroundColor: "white",
+                      color: "black",
+                      fontSize: "16px",
+                      "& .MuiTooltip-arrow": {
+                        color: "white",
+                      },
+                    },
+                  },
+                }}
+                arrow
+              >
+                <RemoveCircleOutlineIcon
+                  onClick={() =>
+                    handleRemoveFromList(watchListDoc?.docId, handleClose)
+                  }
+                  fontSize="large"
+                  className="text-white cursor-pointer hover:text-[#b3b3b3]"
+                />
+              </Tooltip>
             ) : (
-              <AddCircleOutlineOutlinedIcon
-                onClick={handleAddToList}
-                fontSize="large"
-                className="text-white cursor-pointer hover:text-[#b3b3b3]"
-              />
+              <Tooltip
+                title="Add to my list"
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      backgroundColor: "white",
+                      color: "black",
+                      fontSize: "16px",
+                      "& .MuiTooltip-arrow": {
+                        color: "white",
+                      },
+                    },
+                  },
+                }}
+                arrow
+              >
+                <AddCircleOutlineOutlinedIcon
+                  onClick={() =>
+                    handleAddToList(
+                      id,
+                      isMovie,
+                      original_name,
+                      original_title,
+                      overview,
+                      poster_path
+                    )
+                  }
+                  fontSize="large"
+                  className="text-white cursor-pointer hover:text-[#b3b3b3]"
+                />
+              </Tooltip>
             )}
             {isLiked ? (
               <ThumbUpAltIcon
@@ -129,11 +177,28 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
                 className="text-white ml-2 cursor-pointer hover:text-[#b3b3b3]"
               />
             ) : (
-              <ThumbUpOffAltIcon
-                onClick={handleLike}
-                fontSize="large"
-                className="text-white ml-2 cursor-pointer hover:text-[#b3b3b3]"
-              />
+              <Tooltip
+                title="Like this"
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      backgroundColor: "white",
+                      color: "black",
+                      fontSize: "16px",
+                      "& .MuiTooltip-arrow": {
+                        color: "white",
+                      },
+                    },
+                  },
+                }}
+                arrow
+              >
+                <ThumbUpOffAltIcon
+                  onClick={handleLike}
+                  fontSize="large"
+                  className="text-white ml-2 cursor-pointer hover:text-[#b3b3b3]"
+                />
+              </Tooltip>
             )}
           </div>
         </div>

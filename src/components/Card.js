@@ -6,19 +6,34 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { Popover } from "@mui/material";
 import DialogMedia from "./DialogMedia";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
+import useGetWatchlist from "../hooks/useWatchlist";
+import Tooltip from "@mui/material/Tooltip";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import { useSelector } from "react-redux";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
 const Card = ({ media, isMovie }) => {
-  console.log(media);
+  const { handleAddToList, handleRemoveFromList } = useGetWatchlist();
+  const [isLiked, setIsLiked] = useState(false);
 
   const { poster_path, original_title, overview, original_name, id } = media;
+  const watchList = useSelector((store) => store?.watchlist);
+
+  const watchListDoc = watchList?.find((data) => data?.id == id);
+
   const [trailer, setTrailer] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+  };
+
+  const handleOpenDialog = (event) => {
+    event?.stopPropagation();
     handlePopoverClose();
+    setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
@@ -26,9 +41,11 @@ const Card = ({ media, isMovie }) => {
   };
 
   const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-    if (!trailer) {
-      fetchTrailer(isMovie, id);
+    if (!openDialog) {
+      setAnchorEl(event.currentTarget);
+      if (!trailer) {
+        fetchTrailer(isMovie, id);
+      }
     }
   };
 
@@ -70,7 +87,7 @@ const Card = ({ media, isMovie }) => {
 
   return (
     <div
-      className="mr-4 cursor-pointer"
+      className="mr-4 mb-4 cursor-pointer"
       onClick={handlePopoverOpen}
       onMouseLeave={handlePopoverClose}
     >
@@ -114,7 +131,6 @@ const Card = ({ media, isMovie }) => {
               allowFullScreen
             ></iframe>
           </div>
-          {/* <div className="h-48 w-full absolute top-0 bg-gradient-to-t from-[#141414]"></div> */}
           <div
             onClick={handleOpenDialog}
             className="h-fit cursor-pointer bg-[#141414] text-wrap box-border p-2"
@@ -124,10 +140,103 @@ const Card = ({ media, isMovie }) => {
             </div>
             <div className="flex my-2">
               <PlayCircleIcon className="mr-2" fontSize="large" />
-              <AddCircleOutlineOutlinedIcon className="mr-2" fontSize="large" />
-              <ThumbUpOffAltIcon fontSize="large" />
+              {watchListDoc ? (
+                <Tooltip
+                  title="Remove from my list"
+                  componentsProps={{
+                    tooltip: {
+                      sx: {
+                        backgroundColor: "white",
+                        color: "black",
+                        fontSize: "16px",
+                        "& .MuiTooltip-arrow": {
+                          color: "white",
+                        },
+                      },
+                    },
+                  }}
+                  arrow
+                >
+                  <RemoveCircleOutlineIcon
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleRemoveFromList(watchListDoc?.docId, () => {});
+                    }}
+                    fontSize="large"
+                    className="text-white cursor-pointer hover:text-[#b3b3b3]"
+                  />
+                </Tooltip>
+              ) : (
+                <Tooltip
+                  title="Add to my list"
+                  componentsProps={{
+                    tooltip: {
+                      sx: {
+                        backgroundColor: "white",
+                        color: "black",
+                        fontSize: "16px",
+                        "& .MuiTooltip-arrow": {
+                          color: "white",
+                        },
+                      },
+                    },
+                  }}
+                  arrow
+                >
+                  <AddCircleOutlineOutlinedIcon
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleAddToList(
+                        id,
+                        isMovie,
+                        original_name,
+                        original_title,
+                        overview,
+                        poster_path
+                      );
+                    }}
+                    fontSize="large"
+                    className="text-white cursor-pointer hover:text-[#b3b3b3]"
+                  />
+                </Tooltip>
+              )}
+              {isLiked ? (
+                <ThumbUpAltIcon
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleLike();
+                  }}
+                  fontSize="large"
+                  className="text-white ml-2 cursor-pointer hover:text-[#b3b3b3]"
+                />
+              ) : (
+                <Tooltip
+                  title="Like this"
+                  componentsProps={{
+                    tooltip: {
+                      sx: {
+                        backgroundColor: "white",
+                        color: "black",
+                        fontSize: "16px",
+                        "& .MuiTooltip-arrow": {
+                          color: "white",
+                        },
+                      },
+                    },
+                  }}
+                  arrow
+                >
+                  <ThumbUpOffAltIcon
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleLike();
+                    }}
+                    fontSize="large"
+                    className="text-white ml-2 cursor-pointer hover:text-[#b3b3b3]"
+                  />
+                </Tooltip>
+              )}
             </div>
-            {/* <div>{id}</div> */}
             <div className="flex justify-end items-center">
               Show More
               <ExpandCircleDownOutlinedIcon className="ml-1" fontSize="large" />
@@ -136,15 +245,19 @@ const Card = ({ media, isMovie }) => {
         </div>
       </Popover>
 
-      <DialogMedia
-        open={openDialog}
-        handleClose={handleCloseDialog}
-        media={media}
-        isMovie={isMovie}
-        trailer={trailer}
-      />
+      {openDialog && (
+        <DialogMedia
+          open={openDialog}
+          handleClose={handleCloseDialog}
+          media={media}
+          isMovie={isMovie}
+          trailer={trailer}
+        />
+      )}
     </div>
   );
 };
 
 export default Card;
+
+//bubbling trickling stop propagation

@@ -7,7 +7,7 @@ const VideoContainer = () => {
 
   if (!movies) return;
 
-  const videoMovie = movies[3];
+  const videoMovie = movies[2];
   const { original_title, overview, id } = videoMovie;
 
   return (
