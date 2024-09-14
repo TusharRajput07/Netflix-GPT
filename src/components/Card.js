@@ -11,6 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { useSelector } from "react-redux";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 const Card = ({ media, isMovie }) => {
   const { handleAddToList, handleRemoveFromList } = useGetWatchlist();
@@ -25,6 +26,9 @@ const Card = ({ media, isMovie }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const [openDialog, setOpenDialog] = useState(false);
+
+  const theme = useTheme();
+  const isLarge = useMediaQuery(theme.breakpoints.up("md"));
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -92,7 +96,7 @@ const Card = ({ media, isMovie }) => {
       onMouseLeave={handlePopoverClose}
     >
       <img
-        className="min-w-32 w-32 rounded-sm"
+        className="w-24 min-w-24 md:min-w-32 md:w-32 rounded-sm"
         src={CARD_IMG_URL + poster_path}
         alt="Media"
       />
@@ -115,10 +119,10 @@ const Card = ({ media, isMovie }) => {
         onClose={handlePopoverClose}
         disableScrollLock
       >
-        <div className="text-white w-[25vw] relative">
-          <div className="cursor-default pointer-events-none bg-black overflow-hidden h-48">
+        <div className="text-white w-[50vw] md:w-[25vw] relative">
+          <div className="cursor-default pointer-events-none bg-black overflow-hidden h-40 md:h-48">
             <iframe
-              className="pointer-events-none w-full h-full scale-[1.9]"
+              className="pointer-events-none w-full h-full scale-[2.2] md:scale-[1.9]"
               src={
                 "https://www.youtube.com/embed/" +
                 trailer +
@@ -135,11 +139,14 @@ const Card = ({ media, isMovie }) => {
             onClick={handleOpenDialog}
             className="h-fit cursor-pointer bg-[#141414] text-wrap box-border p-2"
           >
-            <div className="text-lg font-bold mb-2">
+            <div className="text-sm md:text-lg font-normal md:font-bold mb-2">
               {original_title ? original_title : original_name}
             </div>
             <div className="flex my-2">
-              <PlayCircleIcon className="mr-2" fontSize="large" />
+              <PlayCircleIcon
+                className="mr-2"
+                fontSize={isLarge ? "large" : "medium"}
+              />
               {watchListDoc ? (
                 <Tooltip
                   title="Remove from my list"
@@ -162,7 +169,7 @@ const Card = ({ media, isMovie }) => {
                       event.stopPropagation();
                       handleRemoveFromList(watchListDoc?.docId, () => {});
                     }}
-                    fontSize="large"
+                    fontSize={isLarge ? "large" : "medium"}
                     className="text-white cursor-pointer hover:text-[#b3b3b3]"
                   />
                 </Tooltip>
@@ -195,7 +202,7 @@ const Card = ({ media, isMovie }) => {
                         poster_path
                       );
                     }}
-                    fontSize="large"
+                    fontSize={isLarge ? "large" : "medium"}
                     className="text-white cursor-pointer hover:text-[#b3b3b3]"
                   />
                 </Tooltip>
@@ -206,7 +213,7 @@ const Card = ({ media, isMovie }) => {
                     event.stopPropagation();
                     handleLike();
                   }}
-                  fontSize="large"
+                  fontSize={isLarge ? "large" : "medium"}
                   className="text-white ml-2 cursor-pointer hover:text-[#b3b3b3]"
                 />
               ) : (
@@ -231,15 +238,18 @@ const Card = ({ media, isMovie }) => {
                       event.stopPropagation();
                       handleLike();
                     }}
-                    fontSize="large"
+                    fontSize={isLarge ? "large" : "medium"}
                     className="text-white ml-2 cursor-pointer hover:text-[#b3b3b3]"
                   />
                 </Tooltip>
               )}
             </div>
-            <div className="flex justify-end items-center">
+            <div className="text-xs md:text-lg flex justify-end items-center">
               Show More
-              <ExpandCircleDownOutlinedIcon className="ml-1" fontSize="large" />
+              <ExpandCircleDownOutlinedIcon
+                className="ml-1"
+                fontSize={isLarge ? "large" : "medium"}
+              />
             </div>
           </div>
         </div>

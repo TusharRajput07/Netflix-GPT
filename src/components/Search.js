@@ -6,12 +6,16 @@ import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { OPTIONS } from "../utils/constants";
 import CardList from "./CardList";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 const Search = () => {
   const navigate = useNavigate();
   const searchRef = useRef(null);
   const [movieList, setMovieList] = useState(null);
   const [tvList, setTvList] = useState(null);
+
+  const theme = useTheme();
+  const isLarge = useMediaQuery(theme.breakpoints.up("md"));
 
   const fetchMovies = async () => {
     const data = await fetch(
@@ -43,11 +47,11 @@ const Search = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#252525]">
       <Header />
-      <div className="bg-[#252525] h-[30vh] w-full pt-[15vh]">
+      <div className="w-full pt-16 md:pt-20">
         <div className="flex items-center justify-between">
-          <div className="text-white text-xl font-semibold flex items-center pl-10">
+          <div className="text-white text-xl font-semibold flex items-center pl-2 md:pl-10">
             <IconButton
               color="success"
               onClick={() => {
@@ -55,7 +59,7 @@ const Search = () => {
               }}
             >
               <ArrowBackIcon
-                fontSize="large"
+                fontSize={isLarge ? "large" : "medium"}
                 className="text-white hover:text-red-500"
               />
             </IconButton>
@@ -63,21 +67,22 @@ const Search = () => {
           <div className="flex justify-center">
             <input
               ref={searchRef}
-              className="w-[30vw] p-4 rounded-sm"
+              className="w-full md:w-[30vw] py-2 md:py-4 px-4 rounded-sm text-sm"
               type="text"
-              placeholder="Search for Movies or TV series"
+              placeholder="Search for movies or tv series"
             />
             <div
               onClick={handleSearch}
-              className="w-fit py-4 px-6 ml-2 rounded-sm font-semibold cursor-pointer text-white bg-red-500 hover:bg-red-700"
+              className="w-fit py-1 md:py-4 px-3 md:px-6 ml-2 rounded-sm font-semibold cursor-pointer text-white bg-red-500 hover:bg-red-700 flex items-center text-sm"
             >
               Search
             </div>
           </div>
-          <div className="w-10"></div>
+          <div className="w-4 md:w-10"></div>
         </div>
       </div>
-      <div className="bg-[#252525] h-screen pl-14">
+
+      <div className="pl-6 md:pl-14 py-8">
         {movieList && (
           <div>
             <h1 className="text-white text-lg font-semibold">Movies</h1>

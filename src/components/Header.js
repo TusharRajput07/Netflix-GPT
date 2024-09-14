@@ -5,10 +5,20 @@ import { useSelector } from "react-redux";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
+import { useMediaQuery, useTheme } from "@mui/material";
+import SignoutDialog from "./SignoutDialog";
 
 const Header = () => {
   const user = useSelector((store) => store.user);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const theme = useTheme();
+  const isLarge = useMediaQuery(theme.breakpoints.up("md"));
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleDialog = () => {
+    setOpenDialog(!openDialog);
+  };
 
   useEffect(() => {
     // on mount
@@ -42,13 +52,18 @@ const Header = () => {
     navigate("/search");
   };
 
+  const scrollToSection = (id) => {
+    const element = document.querySelector(id);
+    element.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
   return (
     <div
-      className={`fixed top-0 z-40 w-full flex justify-between bg-gradient-to-b from-black text-white py-2  px-8 transition-colors duration-700 ease-in-out ${
+      className={`fixed top-0 z-40 w-full flex justify-between bg-gradient-to-b from-black text-white py-0 md:py-2 px-2 md:px-8 transition-colors duration-700 ease-in-out ${
         isScrolled ? "bg-black" : "bg-transparent"
       }`}
     >
-      <div className="flex items-center">
+      <div className="flex items-center w-full">
         <Link to="/browse">
           <img
             className="w-28 mr-3  cursor-pointer"
@@ -57,15 +72,27 @@ const Header = () => {
           ></img>
         </Link>
         <Link to="/browse">
-          <div className="mx-3 cursor-pointer">Home</div>
+          <div className="mx-3 cursor-pointer hidden md:block text-sm md:text-md">
+            Home
+          </div>
         </Link>
-        <div className="mx-3 cursor-pointer">TV Shows</div>
-        <div className="mx-3 cursor-pointer">Movies</div>
+        <div
+          className="mx-3 cursor-pointer hidden md:block text-sm md:text-md"
+          onClick={() => scrollToSection("#tv-shows")}
+        >
+          TV Shows
+        </div>
+        <div
+          className="mx-3 cursor-pointer hidden md:block text-sm md:text-md"
+          onClick={() => scrollToSection("#movies")}
+        >
+          Movies
+        </div>
         <div
           onClick={() => {
             navigate("/mylist");
           }}
-          className="mx-3 cursor-pointer"
+          className="mx-0 md:mx-3 ml-auto md:ml-3 cursor-pointer text-sm md:text-md"
         >
           My List
         </div>
@@ -74,23 +101,31 @@ const Header = () => {
       <div className="flex items-center">
         <SearchIcon
           onClick={handleSearch}
-          className="cursor-pointer"
-          fontSize="large"
+          className="cursor-pointer mx-2 md:mx-0"
+          fontSize={isLarge ? "large" : "medium"}
         />
-        <div className="mx-3">Hi {user?.displayName}</div>
+        <div className="mx-2 md:mx-3 text-sm md:text-md hidden md:block text-nowrap">
+          Hi {user?.displayName}
+        </div>
         <div>
           <img
-            className="w-8 rounded-sm cursor-pointer"
+            className="w-6 md:w-8 min-w-6 md:min-w-8 rounded-sm cursor-pointer"
             src="https://occ-0-4826-3646.1.nflxso.net/dnm/api/v6/vN7bi_My87NPKvsBoib006Llxzg/AAAABXz4LMjJFidX8MxhZ6qro8PBTjmHbxlaLAbk45W1DXbKsAIOwyHQPiMAuUnF1G24CLi7InJHK4Ge4jkXul1xIW49Dr5S7fc.png?r=e6e"
           />
         </div>
         <div
-          className="mx-3 ml-6 cursor-pointer hover:text-red-500"
-          onClick={handleSignOut}
+          className="mx-0 md:mx-3 ml-2 md:ml-6 mb-1 cursor-pointer hover:text-red-500"
+          onClick={handleDialog}
         >
-          <LogoutIcon />
+          <LogoutIcon fontSize={isLarge ? "medium" : "small"} />
         </div>
       </div>
+
+      <SignoutDialog
+        open={openDialog}
+        handleDialog={handleDialog}
+        handleSignOut={handleSignOut}
+      />
     </div>
   );
 };

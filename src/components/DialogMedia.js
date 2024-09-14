@@ -11,6 +11,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import useGetWatchlist from "../hooks/useWatchlist";
 import Tooltip from "@mui/material/Tooltip";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -29,6 +30,9 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
   const watchListDoc = watchList?.find((data) => data?.id == id);
 
   const iframeRef = useRef(null);
+
+  const theme = useTheme();
+  const isLarge = useMediaQuery(theme.breakpoints.up("md"));
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -77,11 +81,11 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
       TransitionComponent={Transition}
       scroll="body"
     >
-      <div className="w-[65vw] relative">
-        <div className="bg-slate-500 h-[80vh] overflow-hidden">
+      <div className="w-full md:w-[65vw] relative">
+        <div className="bg-slate-500 h-[40vh] md:h-[80vh] overflow-hidden">
           <iframe
             ref={iframeRef}
-            className="w-full h-full scale-[1.4] "
+            className="w-full h-full scale-[1.8] md:scale-[1.4] "
             src={
               "https://www.youtube.com/embed/" +
               trailer +
@@ -96,20 +100,21 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
           ></iframe>
         </div>
         <CancelIcon
-          className="absolute top-3 right-3 text-[#181818]"
-          fontSize="large"
+          className="absolute top-3 right-3 text-[#181818] cursor-pointer z-20"
+          onClick={handleClose}
+          fontSize={isLarge ? "large" : "medium"}
         />
 
-        <div className="absolute  top-[55vh] z-20 left-14">
-          <div className="text-3xl mb-4 font-bold text-white">
+        <div className="absolute top-[25vh] md:top-[55vh] z-20 left-4 md:left-14">
+          <div className="text-lg md:text-3xl mb-2 md:mb-4 font-bold text-white">
             {original_title ? original_title : original_name}
           </div>
           <div className="flex items-center">
             <div
               onClick={handleFullScreen}
-              className="bg-white flex items-center justify-center mr-3 w-fit rounded-sm text-lg font-semibold py-1 px-5 text-black pr-9 cursor-pointer hover:bg-[#c9c8c8]"
+              className="bg-white flex items-center justify-center mr-3 w-fit rounded-sm text-sm md:text-xl font-semibold py-1 pl-1 md:pl-5 pr-3 md:pr-9 cursor-pointer text-black hover:bg-[#c9c8c8]"
             >
-              <PlayArrowIcon fontSize="medium" />
+              <PlayArrowIcon fontSize={isLarge ? "large" : "medium"} />
               Play
             </div>
             {watchListDoc ? (
@@ -133,7 +138,7 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
                   onClick={() =>
                     handleRemoveFromList(watchListDoc?.docId, handleClose)
                   }
-                  fontSize="large"
+                  fontSize={isLarge ? "large" : "medium"}
                   className="text-white cursor-pointer hover:text-[#b3b3b3]"
                 />
               </Tooltip>
@@ -165,7 +170,7 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
                       poster_path
                     )
                   }
-                  fontSize="large"
+                  fontSize={isLarge ? "large" : "medium"}
                   className="text-white cursor-pointer hover:text-[#b3b3b3]"
                 />
               </Tooltip>
@@ -173,7 +178,7 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
             {isLiked ? (
               <ThumbUpAltIcon
                 onClick={handleLike}
-                fontSize="large"
+                fontSize={isLarge ? "large" : "medium"}
                 className="text-white ml-2 cursor-pointer hover:text-[#b3b3b3]"
               />
             ) : (
@@ -195,7 +200,7 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
               >
                 <ThumbUpOffAltIcon
                   onClick={handleLike}
-                  fontSize="large"
+                  fontSize={isLarge ? "large" : "medium"}
                   className="text-white ml-2 cursor-pointer hover:text-[#b3b3b3]"
                 />
               </Tooltip>
@@ -203,17 +208,17 @@ const DialogMedia = ({ open, handleClose, media, isMovie, trailer }) => {
           </div>
         </div>
 
-        <div className="absolute top-0 w-full bg-gradient-to-t from-[#181818] h-[80vh]"></div>
-        <div className="bg-[#181818] text-white px-12 pt-2 flex justify-between h-52">
+        <div className="absolute top-0 w-full bg-gradient-to-t from-[#181818] h-[40vh] md:h-[80vh] z-10"></div>
+        <div className="bg-[#181818] text-white px-4 md:px-12 py-2 flex justify-between min-h-52">
           <div className="w-[60%]">
             <div className="my-2 font-bold text-[#B5B5B5]">
               {isMovie
                 ? new Date(details?.release_date)?.getFullYear()
                 : new Date(details?.first_air_date)?.getFullYear()}
             </div>
-            <div className="text-sm">{overview}</div>
+            <div className="text-xs md:text-sm">{overview}</div>
           </div>
-          <div className="w-[30%] text-sm">
+          <div className="w-[30%] text-xs md:text-sm">
             <div className="my-2">
               <span className="text-[#8e8e8e] font-bold">Genre : </span>
               {details?.genres?.map((genre) => genre?.name)?.join(", ")}

@@ -1,34 +1,12 @@
-import { useEffect, useState } from "react";
-import { OPTIONS } from "../utils/constants";
-
-const VideoBackground = ({ id }) => {
-  const [Trailer, setTrailer] = useState(null);
-
-  const getMovieVideo = async () => {
-    const data = await fetch(
-      "https://api.themoviedb.org/3/movie/" + id + "/videos?language=en-US",
-      OPTIONS
-    );
-    const json = await data.json();
-
-    const filteredData = json?.results?.filter(
-      (video) => video.type === "Trailer"
-    );
-    const trailer = filteredData.length ? filteredData[0] : json.results[0];
-    setTrailer(trailer?.key);
-  };
-
-  useEffect(() => {
-    getMovieVideo();
-  }, []);
-
+const VideoBackground = ({ trailer, iframeRef }) => {
   return (
-    <div className="relative h-[95vh] overflow-hidden">
+    <div className="relative h-[40vh] md:h-[95vh] overflow-hidden">
       <iframe
-        className="w-full h-full scale-[1.4] "
+        ref={iframeRef}
+        className="w-full h-full scale-[1.6] md:scale-[1.4] "
         src={
           "https://www.youtube.com/embed/" +
-          Trailer +
+          trailer +
           "?si=L-JbjnKXzZoPJxpW&autoplay=1&mute=1&rel=0&loop=1&showinfo=0&controls=0"
         }
         title="YouTube video player"

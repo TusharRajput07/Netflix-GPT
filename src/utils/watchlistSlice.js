@@ -5,7 +5,6 @@ const watchlistSlice = createSlice({
   initialState: null,
   reducers: {
     updateWatchlist: (state, action) => {
-      console.log(action.payload);
       return action.payload;
     },
   },

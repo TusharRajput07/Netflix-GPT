@@ -11,28 +11,30 @@ const CardsContainer = () => {
   const topRatedTV = useSelector((store) => store?.movies?.topRatedTV);
   const topRatedMovies = useSelector((store) => store?.movies?.topRatedMovies);
 
+  const cardTitle = (title) => (
+    <h1 className="text-white text-sm md:text-lg font-semibold">{title}</h1>
+  );
+
   return (
     <div className="-mt-8">
       <div>
-        <h1 className="text-white text-lg font-semibold">Now Playing Movies</h1>
+        {cardTitle("Now Playing Movies")}
         <CardList mediaList={nowPlayingMovies} isMovie={true} />
       </div>
-      <div>
-        <h1 className="text-white text-lg font-semibold">Top Rated Movies</h1>
+      <div id="movies">
+        {cardTitle("Top Rated Movies")}
         <CardList mediaList={topRatedMovies} isMovie={true} />
       </div>
-      <div>
-        <h1 className="text-white text-lg font-semibold">Top Rated TV Shows</h1>
+      <div id="tv-shows">
+        {cardTitle("Top Rated TV Shows")}
         <CardList mediaList={topRatedTV} isMovie={false} />
       </div>
       <div>
-        <h1 className="text-white text-lg font-semibold">Popular Movies</h1>
+        {cardTitle("Popular Movies")}
         <CardList mediaList={popularMovies} isMovie={true} />
       </div>
       <div>
-        <h1 className="text-white text-lg font-semibold">
-          On The Air TV Shows
-        </h1>
+        {cardTitle("On The Air TV Shows")}
         <CardList mediaList={onTheAirTV} isMovie={false} />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import Header from "./Header";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import VideoContainer from "./VideoContainer";
 import CardsContainer from "./CardsContainer";
 import useNowPlayingMovies from "../hooks/useNowPlayingMovies";
@@ -8,6 +8,7 @@ import useOnTheAirTV from "../hooks/useOnTheAirTV";
 import useTopRatedTV from "../hooks/useTopRatedTV";
 import useTopRatedMovies from "../hooks/useTopRatedMovies";
 import Footer from "./Footer";
+import { useSelector } from "react-redux";
 
 const Browse = () => {
   const getNowPlayingMovies = useNowPlayingMovies();
@@ -15,6 +16,10 @@ const Browse = () => {
   const getOnTheAirTV = useOnTheAirTV();
   const getTopRatedTV = useTopRatedTV();
   const getTopRatedMovies = useTopRatedMovies();
+  const topRatedMovies = useSelector((store) => store.movies.topRatedMovies);
+  const videoRef = useRef(null);
+  const cardsRef = useRef(null);
+  const [containerHeight, setContainerHeight] = useState();
 
   useEffect(() => {
     getNowPlayingMovies();
@@ -24,14 +29,26 @@ const Browse = () => {
     getTopRatedMovies();
   }, []);
 
+  useEffect(() => {
+    getHeight();
+  }, [topRatedMovies]);
+
+  const getHeight = () => {
+    setContainerHeight(
+      videoRef?.current?.clientHeight + cardsRef?.current?.clientHeight
+    );
+  };
+
   return (
-    <div>
+    <div style={{ height: `${containerHeight}px` }}>
       <Header />
-      <div className="bg-black h-[95vh]">
+      <div className="bg-black h-[40vh] md:h-[95vh]" ref={videoRef}>
         <VideoContainer />
       </div>
-      {/* <div className="absolute bottom-16 h-80 z-10 bg-gradient-to-t from-black w-full"></div> */}
-      <div className="absolute z-20 bg-[#141414] pl-16 w-full">
+      <div
+        className="absolute z-20 bg-[#141414] pl-6 md:pl-16 w-full"
+        ref={cardsRef}
+      >
         <CardsContainer />
       </div>
       <Footer />

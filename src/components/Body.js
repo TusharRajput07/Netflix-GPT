@@ -39,7 +39,6 @@ const Body = () => {
       // doc.data() is never undefined for query doc snapshots
       tempList.push({ ...doc.data(), docId: doc.id });
     });
-    console.log(tempList);
 
     dispatch(updateWatchlist(tempList));
   };

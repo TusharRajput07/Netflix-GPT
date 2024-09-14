@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import HeaderStart from "./HeaderStart";
 import useAuth from "../utils/useAuth";
+import Footer from "./Footer";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -28,44 +29,44 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="w-full overflow-hidden">
       <HeaderStart />
-      <div className="h-full w-full overflow-hidden relative">
+      <div className="relative w-full overflow-hidden">
         <img
-          className="brightness-50 scale-125 translate-y-[-10%] w-full h-full"
+          className="brightness-50 scale-x-150 md:scale-125 w-full h-[100vh] md:h-full"
           src="https://assets.nflxext.com/ffe/siteui/vlv3/20bf1f4d-1c73-48fd-8689-310d6dd80efc/81bdc063-cb8f-4afe-8a02-a3131ca4ef5e/IN-en-20240812-POP_SIGNUP_TWO_WEEKS-perspective_WEB_7998f3b6-63e3-424a-8328-550cf777ddce_small.jpg"
         />
-        {/* <div className="bg-slate-500 text-4xl absolute z-10">jdbfjsd</div> */}
+        <div className="absolute top-0 bg-gradient-to-t from-black h-[100vh] md:h-full w-full"></div>
       </div>
-      <div className="absolute bg-gradient-to-t from-black h-96 w-screen -bottom-36"></div>
-      <form className="absolute mt-28 top-0 left-1/2 -translate-x-1/2 text-white w-[450px] px-16 py-12 box-border bg-black bg-opacity-70 p-4">
-        <div className="font-bold mb-7 text-3xl">
+
+      <form className="absolute top-[20vh] left-1/2 -translate-x-1/2 text-white w-[300px] md:w-[450px] px-6 md:px-16 py-6 md:py-12 box-border bg-black bg-opacity-70 p-4">
+        <div className="font-bold mb-4 md:mb-7 text-2xl md:text-3xl">
           {isSignUp ? "Sign Up" : "Sign In"}
         </div>
         {isSignUp && (
           <input
             ref={nameRef}
-            className="w-full my-2 py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
+            className="w-full my-2 py-2 md:py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
             type="text"
             placeholder="Name"
           />
         )}
         <input
           ref={emailRef}
-          className="w-full my-2 py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
+          className="w-full my-2 py-2 md:py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
           type="email"
           placeholder="Email"
         />
         <input
           ref={passwordRef}
-          className="w-full my-2 py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
+          className="w-full my-2 py-2 md:py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
           type="password"
           placeholder="Password"
         />
         {isSignUp && (
           <input
             ref={confirmRef}
-            className="w-full my-2 py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
+            className="w-full my-2 py-2 md:py-4 rounded-sm px-2 bg-transparent border border-[#5E5F60]"
             type="password"
             placeholder="Confirm password"
           />
@@ -91,10 +92,6 @@ const Login = () => {
       </form>
 
       <div className="bg-[#232323] h-2"></div>
-
-      <div className="bg-black text-white py-40 text-center font-extrabold text-2xl">
-        Footer...
-      </div>
     </div>
   );
 };
