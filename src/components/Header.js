@@ -7,6 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import { useMediaQuery, useTheme } from "@mui/material";
 import SignoutDialog from "./SignoutDialog";
+import geminiIcon from "../utils/google-gemini-icon.png";
 
 const Header = () => {
   const user = useSelector((store) => store.user);
@@ -99,11 +100,16 @@ const Header = () => {
       </div>
 
       <div className="flex items-center">
-        <SearchIcon
+        <div
           onClick={handleSearch}
-          className="cursor-pointer mx-2 md:mx-0"
-          fontSize={isLarge ? "large" : "medium"}
-        />
+          className={`flex justify-center items-center p-1 w-12 md:w-28 rounded-full cursor-pointer mx-2 md:mx-0 transition-colors duration-700 ease-in-out ${
+            isScrolled ? "bg-[#252525]" : "bg-black bg-opacity-30"
+          }`}
+        >
+          <SearchIcon fontSize="medium" />
+          <span className="text-sm mx-1 hidden md:block">Search</span>
+          <img className="w-4 md:w-6 h-4 md:h-6" src={geminiIcon} />
+        </div>
         <div className="mx-2 md:mx-3 text-sm md:text-md hidden md:block text-nowrap">
           Hi {user?.displayName}
         </div>

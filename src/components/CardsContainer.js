@@ -1,5 +1,7 @@
 import { useSelector } from "react-redux";
 import CardList from "./CardList";
+import { useEffect, useState } from "react";
+import { OPTIONS } from "../utils/constants";
 
 const CardsContainer = () => {
   const nowPlayingMovies = useSelector(
@@ -10,6 +12,13 @@ const CardsContainer = () => {
   const onTheAirTV = useSelector((store) => store?.movies?.onTheAirTV);
   const topRatedTV = useSelector((store) => store?.movies?.topRatedTV);
   const topRatedMovies = useSelector((store) => store?.movies?.topRatedMovies);
+  const recommendedMovies = useSelector(
+    (store) => store?.movies?.recommendedMovies
+  );
+
+  // useEffect(() => {
+  //   getGeminiRecommendations();
+  // }, []);
 
   const cardTitle = (title) => (
     <h1 className="text-white text-sm md:text-lg font-semibold">{title}</h1>
@@ -24,6 +33,10 @@ const CardsContainer = () => {
       <div id="movies">
         {cardTitle("Top Rated Movies")}
         <CardList mediaList={topRatedMovies} isMovie={true} />
+      </div>
+      <div>
+        {cardTitle("Recommended Movies based on your watchlist")}
+        <CardList mediaList={recommendedMovies} isMovie={true} />
       </div>
       <div id="tv-shows">
         {cardTitle("Top Rated TV Shows")}

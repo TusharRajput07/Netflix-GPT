@@ -9,6 +9,7 @@ import useTopRatedTV from "../hooks/useTopRatedTV";
 import useTopRatedMovies from "../hooks/useTopRatedMovies";
 import Footer from "./Footer";
 import { useSelector } from "react-redux";
+import useRecommendedMovies from "../hooks/useRecommendedMovies";
 
 const Browse = () => {
   const getNowPlayingMovies = useNowPlayingMovies();
@@ -16,10 +17,14 @@ const Browse = () => {
   const getOnTheAirTV = useOnTheAirTV();
   const getTopRatedTV = useTopRatedTV();
   const getTopRatedMovies = useTopRatedMovies();
+  const getGeminiRecommendations = useRecommendedMovies();
   const topRatedMovies = useSelector((store) => store.movies.topRatedMovies);
   const videoRef = useRef(null);
   const cardsRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState();
+  const recommendedMovies = useSelector(
+    (store) => store?.movies?.recommendedMovies
+  );
 
   useEffect(() => {
     getNowPlayingMovies();
@@ -27,6 +32,9 @@ const Browse = () => {
     getOnTheAirTV();
     getTopRatedTV();
     getTopRatedMovies();
+    if (!recommendedMovies) {
+      getGeminiRecommendations();
+    }
   }, []);
 
   useEffect(() => {
