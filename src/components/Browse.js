@@ -19,6 +19,7 @@ const Browse = () => {
   const getTopRatedMovies = useTopRatedMovies();
   const getGeminiRecommendations = useRecommendedMovies();
   const topRatedMovies = useSelector((store) => store.movies.topRatedMovies);
+  const watchlist = useSelector((store) => store.watchlist);
   const videoRef = useRef(null);
   const cardsRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState();
@@ -32,14 +33,19 @@ const Browse = () => {
     getOnTheAirTV();
     getTopRatedTV();
     getTopRatedMovies();
-    if (!recommendedMovies) {
-      getGeminiRecommendations();
-    }
   }, []);
 
   useEffect(() => {
+    if (!recommendedMovies && Array.isArray(watchlist)) {
+      console.log("i am running", watchlist);
+
+      getGeminiRecommendations();
+    }
+  }, [watchlist]);
+
+  useEffect(() => {
     getHeight();
-  }, [topRatedMovies]);
+  }, [topRatedMovies, recommendedMovies]);
 
   const getHeight = () => {
     setContainerHeight(

@@ -25,30 +25,33 @@ const useRecommendedMovies = () => {
   // ***********************************recommended movies extraction*****************************
   // gemini function to fetch recommended movies
   const getGeminiRecommendations = async () => {
-    console.log("funtion called");
-    const genAI = new GoogleGenerativeAI(
-      "AIzaSyA7AOqkAg9sEMWV04-ilcaVGHp7kv7Iods"
-    );
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const prompt =
-      "Act as a movie recommendation system. Analyze the following query string: '" +
-      watchlistString +
-      "', and provide a list of 15 comma-separated movie titles in a single string which are similar in genre to the given query movies. If the given query string is empty, provide any 15 movie of any genre. Do not add any heading text. Do not add release year. Just a single comma separated string.";
-    const result = await model.generateContent(prompt);
-    console.log(result.response.text());
-    // When Harry Met Sally, Love Actually, The Proposal, 500 Days of Summer, Easy A
-    const geminiMediaList = result.response.text().split(", ");
-    console.log(geminiMediaList);
-    // ['When Harry Met Sally', 'Love Actually', 'The Proposal', '500 Days of Summer', 'Easy A']
-    const promiseMovieList = geminiMediaList.map((media) => fetchMovies(media));
-    // [Promise, Promise, Promise, Promise, Promise]
-    const tmdbMovieResults = await Promise.all(promiseMovieList);
-    const filteredTmdbMovies = tmdbMovieResults
-      .map((subarray) => subarray?.[0])
-      ?.filter((e) => e);
-    console.log(filteredTmdbMovies);
+    try {
+      console.log("funtion called");
+      const genAI = new GoogleGenerativeAI(
+        process.env.REACT_APP_GEMINI_API_KEY
+      );
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const prompt =
+        "Act as a movie recommendation system. Analyze the following query string: '" +
+        watchlistString +
+        "', and provide a list of 15 comma-separated movie titles in a single string which are similar in genre to the given query movies. If the given query string is empty, provide any 15 movie of any genre. Do not add any heading text. Do not add release year. Just a single comma separated string.";
+      const result = await model.generateContent(prompt);
+      // When Harry Met Sally, Love Actually, The Proposal, 500 Days of Summer, Easy A
+      const geminiMediaList = result.response.text().split(", ");
+      // ['When Harry Met Sally', 'Love Actually', 'The Proposal', '500 Days of Summer', 'Easy A']
+      const promiseMovieList = geminiMediaList.map((media) =>
+        fetchMovies(media)
+      );
+      // [Promise, Promise, Promise, Promise, Promise]
+      const tmdbMovieResults = await Promise.all(promiseMovieList);
+      const filteredTmdbMovies = tmdbMovieResults
+        .map((subarray) => subarray?.[0])
+        ?.filter((e) => e);
 
-    dispatch(addRecommendedMovies(filteredTmdbMovies));
+      dispatch(addRecommendedMovies(filteredTmdbMovies));
+    } catch (error) {
+      console.error(error);
+    }
   };
   // *********************************************************************************************
 

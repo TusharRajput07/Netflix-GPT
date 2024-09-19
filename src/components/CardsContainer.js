@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import CardList from "./CardList";
-import { useEffect, useState } from "react";
-import { OPTIONS } from "../utils/constants";
+import geminiIcon from "../utils/google-gemini-icon.png";
 
 const CardsContainer = () => {
   const nowPlayingMovies = useSelector(
@@ -15,10 +14,7 @@ const CardsContainer = () => {
   const recommendedMovies = useSelector(
     (store) => store?.movies?.recommendedMovies
   );
-
-  // useEffect(() => {
-  //   getGeminiRecommendations();
-  // }, []);
+  const watchlist = useSelector((store) => store?.watchlist);
 
   const cardTitle = (title) => (
     <h1 className="text-white text-sm md:text-lg font-semibold">{title}</h1>
@@ -35,7 +31,15 @@ const CardsContainer = () => {
         <CardList mediaList={topRatedMovies} isMovie={true} />
       </div>
       <div>
-        {cardTitle("Recommended Movies based on your watchlist")}
+        <div className="flex items-center">
+          {cardTitle(
+            `Recommended Movies ${
+              watchlist?.length ? "based on your watchlist" : "for you"
+            }`
+          )}
+          <img className="w-4 md:w-5 h-4 md:h-5 ml-1" src={geminiIcon} />
+        </div>
+
         <CardList mediaList={recommendedMovies} isMovie={true} />
       </div>
       <div id="tv-shows">

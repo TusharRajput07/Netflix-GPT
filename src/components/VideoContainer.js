@@ -11,7 +11,6 @@ const VideoContainer = () => {
   const iframeRef = useRef(null);
 
   const getMovieVideo = async (resetAfterClose) => {
-    console.log(movies);
     const id = movies?.[2]?.id;
     setVideoMovie(movies?.[2]);
     const data = await fetch(

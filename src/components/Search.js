@@ -46,60 +46,64 @@ const Search = () => {
   const { GoogleGenerativeAI } = require("@google/generative-ai");
 
   const handleGeminiSearch = async () => {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const genAI = new GoogleGenerativeAI(
-      "AIzaSyA7AOqkAg9sEMWV04-ilcaVGHp7kv7Iods"
-    );
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const genAI = new GoogleGenerativeAI(
+        process.env.REACT_APP_GEMINI_API_KEY
+      );
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const prompt =
-      "Act as a movie/TV shows recommendation system. Given the following query: '" +
-      searchRef?.current?.value +
-      "', provide a list of 20 comma-separated movie/TV shows titles in a single string. First 10 movies and then 10 tv shows, so combined 20. Do not add any heading text. Do not add release year. Example: Interstellar, Inception, Tenet, The Dark Knight, The Departed. If no movies/ tv shows are found, return the string 'Not found'. Limit results to Hollywood movies/tv shows unless a different language is specified.";
+      const prompt =
+        "Act as a movie/TV shows recommendation system. Given the following query: '" +
+        searchRef?.current?.value +
+        "', provide a list of 20 comma-separated movie/TV shows titles in a single string. First 10 movies and then 10 tv shows, so combined 20. Do not add any heading text. Do not add release year. Example: Interstellar, Inception, Tenet, The Dark Knight, The Departed. If no movies/ tv shows are found, return the string 'Not found'. Limit results to Hollywood movies/tv shows unless a different language is specified.";
 
-    const result = await model.generateContent(prompt);
-    if (result.response.text().trim() === "Not found") {
-      setErrorMessage("No results found");
-      setMovieList(null);
-      setTvList(null);
+      const result = await model.generateContent(prompt);
+      if (result.response.text().trim() === "Not found") {
+        setErrorMessage("No results found");
+        setMovieList(null);
+        setTvList(null);
+        setLoading(false);
+        return;
+      }
+      setErrorMessage(null);
+      // console.log(result.response.text());
+
+      // returned result from gemini example
+      // When Harry Met Sally, Love Actually, The Proposal, 500 Days of Summer, Easy A
+
+      const geminiMediaList = result.response.text().split(", ");
+
+      // ['When Harry Met Sally', 'Love Actually', 'The Proposal', '500 Days of Summer', 'Easy A']
+
+      // dividing the gemini list in 2 halves. one for movies and other for tv shows.
+
+      const list1 = geminiMediaList.slice(0, 10);
+      const list2 = geminiMediaList.slice(10);
+
+      const promiseMovieList = list1.map((media) => fetchMovies(media));
+      const promiseTvList = list2.map((media) => fetchTV(media));
+
+      // [Promise, Promise, Promise, Promise, Promise]
+
+      const tmdbMovieResults = await Promise.all(promiseMovieList);
+      const tmdbTvResults = await Promise.all(promiseTvList);
+
+      const filteredTmdbMovies = tmdbMovieResults
+        .map((subarray) => subarray?.[0])
+        ?.filter((e) => e);
+      const filteredTmdbTv = tmdbTvResults
+        .map((subarray) => subarray?.[0])
+        ?.filter((e) => e);
+
+      setMovieList(filteredTmdbMovies);
+      setTvList(filteredTmdbTv);
+
       setLoading(false);
-      return;
+    } catch (error) {
+      console.error(error);
     }
-    setErrorMessage(null);
-    // console.log(result.response.text());
-
-    // returned result from gemini example
-    // When Harry Met Sally, Love Actually, The Proposal, 500 Days of Summer, Easy A
-
-    const geminiMediaList = result.response.text().split(", ");
-
-    // ['When Harry Met Sally', 'Love Actually', 'The Proposal', '500 Days of Summer', 'Easy A']
-
-    // dividing the gemini list in 2 halves. one for movies and other for tv shows.
-
-    const list1 = geminiMediaList.slice(0, 10);
-    const list2 = geminiMediaList.slice(10);
-
-    const promiseMovieList = list1.map((media) => fetchMovies(media));
-    const promiseTvList = list2.map((media) => fetchTV(media));
-
-    // [Promise, Promise, Promise, Promise, Promise]
-
-    const tmdbMovieResults = await Promise.all(promiseMovieList);
-    const tmdbTvResults = await Promise.all(promiseTvList);
-
-    const filteredTmdbMovies = tmdbMovieResults
-      .map((subarray) => subarray?.[0])
-      ?.filter((e) => e);
-    const filteredTmdbTv = tmdbTvResults
-      .map((subarray) => subarray?.[0])
-      ?.filter((e) => e);
-
-    setMovieList(filteredTmdbMovies);
-    setTvList(filteredTmdbTv);
-
-    setLoading(false);
   };
 
   //*************************************************************************************************
