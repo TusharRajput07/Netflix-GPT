@@ -12,6 +12,10 @@ import MyList from "./MyList";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { updateWatchlist } from "../utils/watchlistSlice";
+import ScrollToTop from "./ScrollToTop";
+import ProtectedRouteIn from "./ProtectedRouteIn";
+import ProtectedRouteOut from "./ProtextedRouteOut";
+import Error from "./Error";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -46,23 +50,57 @@ const Body = () => {
   const appRouter = createBrowserRouter([
     {
       path: "/",
-      element: <Home />,
+      element: (
+        <>
+          <ScrollToTop />
+          <Home />
+        </>
+      ),
     },
     {
       path: "/login",
-      element: <Login />,
+      element: (
+        <ProtectedRouteOut>
+          <ScrollToTop />
+          <Login />
+        </ProtectedRouteOut>
+      ),
     },
     {
       path: "/browse",
-      element: <Browse />,
+      element: (
+        <ProtectedRouteIn>
+          <ScrollToTop />
+          <Browse />
+        </ProtectedRouteIn>
+      ),
     },
     {
       path: "/search",
-      element: <Search />,
+      element: (
+        <ProtectedRouteIn>
+          <ScrollToTop />
+          <Search />,
+        </ProtectedRouteIn>
+      ),
     },
     {
       path: "/mylist",
-      element: <MyList />,
+      element: (
+        <ProtectedRouteIn>
+          <ScrollToTop />
+          <MyList />
+        </ProtectedRouteIn>
+      ),
+    },
+    {
+      path: "*",
+      element: (
+        <>
+          <ScrollToTop />
+          <Error />
+        </>
+      ),
     },
   ]);
 

@@ -53,10 +53,6 @@ const Home = () => {
                 Downloading...
               </div>
             </div>
-            <img
-              className="w-10 md:w-14 ml-auto"
-              src="https://assets.nflxext.com/ffe/siteui/acquisition/ourStory/fuji/desktop/download-icon.gif"
-            />
           </div>
         </div>
 

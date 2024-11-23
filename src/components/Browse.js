@@ -18,7 +18,6 @@ const Browse = () => {
   const getTopRatedTV = useTopRatedTV();
   const getTopRatedMovies = useTopRatedMovies();
   const getGeminiRecommendations = useRecommendedMovies();
-  const topRatedMovies = useSelector((store) => store.movies.topRatedMovies);
   const watchlist = useSelector((store) => store.watchlist);
   const videoRef = useRef(null);
   const cardsRef = useRef(null);
@@ -45,9 +44,12 @@ const Browse = () => {
 
   useEffect(() => {
     getHeight();
-  }, [topRatedMovies, recommendedMovies]);
+  }, []);
 
   const getHeight = () => {
+    console.log(
+      videoRef?.current?.clientHeight + cardsRef?.current?.clientHeight
+    );
     setContainerHeight(
       videoRef?.current?.clientHeight + cardsRef?.current?.clientHeight
     );

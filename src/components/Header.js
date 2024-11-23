@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useSelector } from "react-redux";
@@ -20,6 +20,8 @@ const Header = () => {
   const handleDialog = () => {
     setOpenDialog(!openDialog);
   };
+
+  const { pathname } = useLocation();
 
   useEffect(() => {
     // on mount
@@ -77,39 +79,47 @@ const Header = () => {
             Home
           </div>
         </Link>
-        <div
-          className="mx-3 cursor-pointer hidden md:block text-sm md:text-md"
-          onClick={() => scrollToSection("#tv-shows")}
-        >
-          TV Shows
-        </div>
-        <div
-          className="mx-3 cursor-pointer hidden md:block text-sm md:text-md"
-          onClick={() => scrollToSection("#movies")}
-        >
-          Movies
-        </div>
-        <div
-          onClick={() => {
-            navigate("/mylist");
-          }}
-          className="mx-0 md:mx-3 ml-auto md:ml-3 cursor-pointer text-sm md:text-md"
-        >
-          My List
-        </div>
+        {pathname === "/browse" && (
+          <div
+            className="mx-3 cursor-pointer hidden md:block text-sm md:text-md"
+            onClick={() => scrollToSection("#tv-shows")}
+          >
+            TV Shows
+          </div>
+        )}
+        {pathname === "/browse" && (
+          <div
+            className="mx-3 cursor-pointer hidden md:block text-sm md:text-md"
+            onClick={() => scrollToSection("#movies")}
+          >
+            Movies
+          </div>
+        )}
+        {pathname !== "/mylist" && (
+          <div
+            onClick={() => {
+              navigate("/mylist");
+            }}
+            className="mx-0 md:mx-3 ml-auto md:ml-3 cursor-pointer text-sm md:text-md"
+          >
+            My List
+          </div>
+        )}
       </div>
 
       <div className="flex items-center">
-        <div
-          onClick={handleSearch}
-          className={`flex justify-center items-center p-1 w-12 md:w-28 rounded-full cursor-pointer mx-2 md:mx-0 transition-colors duration-700 ease-in-out ${
-            isScrolled ? "bg-[#252525]" : "bg-black bg-opacity-30"
-          }`}
-        >
-          <SearchIcon fontSize="medium" />
-          <span className="text-sm mx-1 hidden md:block">Search</span>
-          <img className="w-4 md:w-6 h-4 md:h-6" src={geminiIcon} />
-        </div>
+        {pathname !== "/search" && (
+          <div
+            onClick={handleSearch}
+            className={`flex justify-center items-center p-1 w-12 md:w-28 rounded-full cursor-pointer mx-2 md:mx-0 transition-colors duration-700 ease-in-out ${
+              isScrolled ? "bg-[#252525]" : "bg-black bg-opacity-30"
+            }`}
+          >
+            <SearchIcon fontSize="medium" />
+            <span className="text-sm mx-1 hidden md:block">Search</span>
+            <img className="w-4 md:w-6 h-4 md:h-6" src={geminiIcon} />
+          </div>
+        )}
         <div className="mx-2 md:mx-3 text-sm md:text-md hidden md:block text-nowrap">
           Hi {user?.displayName}
         </div>

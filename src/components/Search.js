@@ -20,6 +20,12 @@ const Search = () => {
   const theme = useTheme();
   const isLarge = useMediaQuery(theme.breakpoints.up("md"));
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleGeminiSearch();
+    }
+  };
+
   const fetchMovies = async (movie) => {
     const data = await fetch(
       "https://api.themoviedb.org/3/search/movie?query=" +
@@ -153,6 +159,7 @@ const Search = () => {
               className="w-full md:w-[30vw] py-2 md:py-4 px-4 rounded-sm text-sm"
               type="text"
               placeholder="horror movies..."
+              onKeyDown={handleKeyDown}
             />
             <div
               onClick={handleGeminiSearch}

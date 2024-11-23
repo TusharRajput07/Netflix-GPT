@@ -22,6 +22,13 @@ const Login = () => {
     );
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key == "Enter") {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   const handleSignUp = () => {
     setIsSignUp(!isSignUp);
     emailRef.current.value = "";
@@ -39,7 +46,10 @@ const Login = () => {
         <div className="absolute top-0 bg-gradient-to-t from-black h-[100vh] md:h-full w-full"></div>
       </div>
 
-      <form className="absolute top-[20vh] left-1/2 -translate-x-1/2 text-white w-[300px] md:w-[450px] px-6 md:px-16 py-6 md:py-12 box-border bg-black bg-opacity-70 p-4">
+      <form
+        onKeyDown={handleKeyDown}
+        className="absolute top-[20vh] left-1/2 -translate-x-1/2 text-white w-[300px] md:w-[450px] px-6 md:px-16 py-6 md:py-12 box-border bg-black bg-opacity-70 p-4"
+      >
         <div className="font-bold mb-4 md:mb-7 text-2xl md:text-3xl">
           {isSignUp ? "Sign Up" : "Sign In"}
         </div>
