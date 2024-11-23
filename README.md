@@ -45,3 +45,7 @@
 # filled the my list page from the data subscribed from redux store.
 
 # added tailwind media queries for making the app responsive on smallscreen devices.
+
+# added gemini 1.5 flash apis for search page and recommended movies.
+
+# fixed multiple UI bugs.
