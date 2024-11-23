@@ -80,7 +80,7 @@ const Body = () => {
       element: (
         <ProtectedRouteIn>
           <ScrollToTop />
-          <Search />,
+          <Search />
         </ProtectedRouteIn>
       ),
     },
