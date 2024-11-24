@@ -42,7 +42,7 @@ const Browse = () => {
 
   useEffect(() => {
     getHeight();
-  }, []);
+  }, [videoRef?.current?.clientHeight, cardsRef?.current?.clientHeight]);
 
   const getHeight = () => {
     setContainerHeight(
@@ -51,7 +51,7 @@ const Browse = () => {
   };
 
   return (
-    <div style={{ height: `${containerHeight}px` }}>
+    <div className="bg-[#141414]" style={{ height: `${containerHeight}px` }}>
       <Header />
       <div className="bg-black h-[40vh] md:h-[95vh]" ref={videoRef}>
         <VideoContainer />
@@ -62,7 +62,6 @@ const Browse = () => {
       >
         <CardsContainer />
       </div>
-      <Footer />
     </div>
   );
 };
