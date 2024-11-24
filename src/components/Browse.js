@@ -36,8 +36,6 @@ const Browse = () => {
 
   useEffect(() => {
     if (!recommendedMovies && Array.isArray(watchlist)) {
-      console.log("i am running", watchlist);
-
       getGeminiRecommendations();
     }
   }, [watchlist]);
@@ -47,9 +45,6 @@ const Browse = () => {
   }, []);
 
   const getHeight = () => {
-    console.log(
-      videoRef?.current?.clientHeight + cardsRef?.current?.clientHeight
-    );
     setContainerHeight(
       videoRef?.current?.clientHeight + cardsRef?.current?.clientHeight
     );

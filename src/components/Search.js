@@ -54,7 +54,6 @@ const Search = () => {
   const handleGeminiSearch = async () => {
     try {
       setLoading(true);
-      console.log(process.env.REACT_APP_GEMINI_API_KEY);
 
       const genAI = new GoogleGenerativeAI(
         process.env.REACT_APP_GEMINI_API_KEY
