@@ -3,7 +3,7 @@ const VideoBackground = ({ trailer, iframeRef }) => {
     <div className="relative h-[40vh] md:h-[95vh] overflow-hidden">
       <iframe
         ref={iframeRef}
-        className="w-full h-full scale-[1.6] md:scale-[1.4] "
+        className="w-full h-full scale-[1.8] md:scale-[1.4] "
         src={
           "https://www.youtube.com/embed/" +
           trailer +
